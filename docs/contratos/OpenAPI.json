@@ -1,0 +1,253 @@
+openapi: 3.2.0
+info:
+  title: VetCare – Servicio de Gestion de Citas y Atencion
+  description: |
+    Contrato de frontera API-first para la gestion de citas y atenciones veterinarias.
+    Permite registrar citas, gestionar atenciones clinicas y consultar historial.
+  version: 1.0.0
+
+
+servers:
+  - url: /api/v1
+    description: Servidor principal
+
+
+paths:
+  /citas:
+    get:
+      tags: [Citas]
+      summary: Listar citas
+      operationId: listarCitas
+      responses:
+        "200":
+          description: Lista de citas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CitaResponse"
+
+
+    post:
+      tags: [Citas]
+      summary: Crear una nueva cita
+      operationId: crearCita
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CitaRequest"
+      responses:
+        "201":
+          description: Cita creada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CitaResponse"
+        "400":
+          description: Datos inválidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
+  /citas/{citaId}:
+    get:
+      tags: [Citas]
+      summary: Obtener una cita por ID
+      operationId: obtenerCita
+      parameters:
+        - $ref: "#/components/parameters/CitaId"
+      responses:
+        "200":
+          description: Detalle de la cita
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CitaResponse"
+        "404":
+          description: Cita no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
+    delete:
+      tags: [Citas]
+      summary: Cancelar una cita
+      operationId: cancelarCita
+      parameters:
+        - $ref: "#/components/parameters/CitaId"
+      responses:
+        "200":
+          description: Cita cancelada
+          content:
+            application/json:
+              schema:
+                type: object
+
+
+  /atenciones:
+    post:
+      tags: [Atencion]
+      summary: Registrar una atencion medica
+      operationId: registrarAtencion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AtencionRequest"
+      responses:
+        "201":
+          description: Atencion registrada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AtencionResponse"
+
+
+  /atenciones/{atencionId}:
+    get:
+      tags: [Atencion]
+      summary: Obtener atencion por ID
+      operationId: obtenerAtencion
+      parameters:
+        - $ref: "#/components/parameters/AtencionId"
+      responses:
+        "200":
+          description: Detalle de la atencion
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AtencionResponse"
+
+
+components:
+  schemas:
+    BaseCita:
+      type: object
+      required:
+        - clienteId
+        - fecha
+        - hora
+        - mascotaId
+      properties:
+        mascotaId:
+          type: string
+        clienteId:
+          type: string
+        fecha:
+          type: string
+          format: date
+        hora:
+          type: string
+        motivo:
+          type: string
+
+
+    CitaRequest:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/BaseCita"
+        - type: object
+          properties:
+            prioridad:
+              type: string
+              enum: [normal, urgente]
+
+
+    CitaResponse:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/BaseCita"
+        - type: object
+          properties:
+            citaId:
+              type: string
+            estado:
+              type: string
+              enum: [creada, confirmada, en_proceso, finalizada, cancelada]
+
+
+    AtencionBase:
+      type: object
+      required:
+        - fecha
+        - mascotaId
+        - motivo
+        - veterinarioId
+      properties:
+        mascotaId:
+          type: string
+        veterinarioId:
+          type: string
+        fecha:
+          type: string
+          format: date
+        motivo:
+          type: string
+
+
+    AtencionRequest:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/AtencionBase"
+        - type: object
+          properties:
+            diagnostico:
+              type: string
+            tratamiento:
+              $ref: "#/components/schemas/Tratamiento"
+
+
+    AtencionResponse:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/AtencionRequest"
+        - type: object
+          properties:
+            atencionId:
+              type: string
+            estado:
+              type: string
+              enum: [registrada, en_revision, completada, anulada]
+
+
+    Tratamiento:
+      type: object
+      properties:
+        descripcion:
+          type: string
+        indicaciones:
+          type: string
+
+
+    Error:
+      type: object
+      properties:
+        codigo:
+          type: string
+        mensaje:
+          type: string
+
+
+  parameters:
+    CitaId:
+      name: citaId
+      in: path
+      required: true
+      schema:
+        type: string
+
+
+    AtencionId:
+      name: atencionId
+      in: path
+      required: true
+      schema:
+        type: string
