@@ -1,0 +1,21 @@
+{
+  "name": "vetcare-slice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1",
+    "jest": "^30.5.1",
+    "supertest": "^7.2.2"
+  }
+}
