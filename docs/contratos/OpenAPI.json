@@ -1,17 +1,14 @@
-openapi: 3.2.0
+openapi: 3.0.3
 info:
-  title: VetCare – Servicio de Gestion de Citas y Atencion
+  title: VetCare - Servicio de Gestion de Citas y Atencion
   description: |
-    Contrato de frontera API-first para la gestion de citas y atenciones veterinarias.
-    Permite registrar citas, gestionar atenciones clinicas y consultar historial.
-  version: 1.0.0
-
-
+    Contrato de frontera API-first para la gestion de citas y atenciones
+    veterinarias. Permite registrar citas, gestionar atenciones clinicas,
+    procesar pagos y consultar historial.
+  version: 1.1.0
 servers:
   - url: /api/v1
     description: Servidor principal
-
-
 paths:
   /citas:
     get:
@@ -27,8 +24,6 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/CitaResponse"
-
-
     post:
       tags: [Citas]
       summary: Crear una nueva cita
@@ -47,20 +42,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/CitaResponse"
         "400":
-          description: Datos inválidos
+          description: Datos invalidos
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
 
-
   /citas/{citaId}:
+    parameters:
+      - $ref: "#/components/parameters/CitaId"
     get:
       tags: [Citas]
       summary: Obtener una cita por ID
       operationId: obtenerCita
-      parameters:
-        - $ref: "#/components/parameters/CitaId"
       responses:
         "200":
           description: Detalle de la cita
@@ -74,14 +68,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
-
     delete:
       tags: [Citas]
       summary: Cancelar una cita
       operationId: cancelarCita
-      parameters:
-        - $ref: "#/components/parameters/CitaId"
       responses:
         "200":
           description: Cita cancelada
@@ -89,7 +79,12 @@ paths:
             application/json:
               schema:
                 type: object
-
+                properties:
+                  citaId:
+                    type: string
+                  estado:
+                    type: string
+                    enum: [cancelada]
 
   /atenciones:
     post:
@@ -110,14 +105,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/AtencionResponse"
 
-
   /atenciones/{atencionId}:
+    parameters:
+      - $ref: "#/components/parameters/AtencionId"
     get:
       tags: [Atencion]
       summary: Obtener atencion por ID
       operationId: obtenerAtencion
-      parameters:
-        - $ref: "#/components/parameters/AtencionId"
       responses:
         "200":
           description: Detalle de la atencion
@@ -126,6 +120,57 @@ paths:
               schema:
                 $ref: "#/components/schemas/AtencionResponse"
 
+  /pagos:
+    post:
+      tags: [Pagos]
+      summary: Procesar pago de una cita
+      operationId: procesarPago
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PagoRequest"
+      responses:
+        "201":
+          description: Pago procesado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagoResponse"
+        "402":
+          description: Pago rechazado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "400":
+          description: Datos invalidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /pagos/{pagoId}:
+    parameters:
+      - $ref: "#/components/parameters/PagoId"
+    get:
+      tags: [Pagos]
+      summary: Obtener pago por ID
+      operationId: obtenerPago
+      responses:
+        "200":
+          description: Detalle del pago
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagoResponse"
+        "404":
+          description: Pago no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
 components:
   schemas:
@@ -149,7 +194,6 @@ components:
         motivo:
           type: string
 
-
     CitaRequest:
       type: object
       allOf:
@@ -159,7 +203,6 @@ components:
             prioridad:
               type: string
               enum: [normal, urgente]
-
 
     CitaResponse:
       type: object
@@ -172,7 +215,6 @@ components:
             estado:
               type: string
               enum: [creada, confirmada, en_proceso, finalizada, cancelada]
-
 
     AtencionBase:
       type: object
@@ -192,7 +234,6 @@ components:
         motivo:
           type: string
 
-
     AtencionRequest:
       type: object
       allOf:
@@ -203,7 +244,6 @@ components:
               type: string
             tratamiento:
               $ref: "#/components/schemas/Tratamiento"
-
 
     AtencionResponse:
       type: object
@@ -217,7 +257,6 @@ components:
               type: string
               enum: [registrada, en_revision, completada, anulada]
 
-
     Tratamiento:
       type: object
       properties:
@@ -226,6 +265,32 @@ components:
         indicaciones:
           type: string
 
+    PagoRequest:
+      type: object
+      required:
+        - citaId
+        - monto
+        - metodoPago
+      properties:
+        citaId:
+          type: string
+        monto:
+          type: number
+        metodoPago:
+          type: string
+          enum: [tarjeta, efectivo, transferencia]
+
+    PagoResponse:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/PagoRequest"
+        - type: object
+          properties:
+            pagoId:
+              type: string
+            estado:
+              type: string
+              enum: [aprobado, rechazado, pendiente]
 
     Error:
       type: object
@@ -235,7 +300,6 @@ components:
         mensaje:
           type: string
 
-
   parameters:
     CitaId:
       name: citaId
@@ -243,10 +307,14 @@ components:
       required: true
       schema:
         type: string
-
-
     AtencionId:
       name: atencionId
+      in: path
+      required: true
+      schema:
+        type: string
+    PagoId:
+      name: pagoId
       in: path
       required: true
       schema:
