@@ -14,7 +14,7 @@
 | Puntos totales planificados | 10 |
 | Puntos cerrados con Definición de Terminado | 3 |
 | Velocidad | **Parcial** — el sprint cierra el 02/10/2026, esta cifra NO es la velocidad de cierre |
-| Enlace al burndown | https://github.com/Cristhian-Chura/is1-2026-vetcare/blob/main/docs/proceso/burndown-sprint1-semana6.md |
+| Enlace al burndown  |  https://github.com/Cristhian-Chura/is1-2026-vetcare/blob/main/docs/proceso/Reporte_Velocidad_Sprint1_VetCare.md | 
 
 ## Burndown del Sprint 1
 
