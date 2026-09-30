@@ -1,8 +1,11 @@
 // Punto de entrada HTTP. Su única responsabilidad es traducir HTTP <-> dominio.
 // La validación de campos obligatorios replica components.schemas.BaseCita.required
-// del contrato OpenAPI v3.2.0 (clienteId, fecha, hora, mascotaId).
+// del contrato OpenAPI v3.0.3 (clienteId, fecha, hora, mascotaId).
 const CAMPOS_REQUERIDOS = ['clienteId', 'fecha', 'hora', 'mascotaId'];
 
+/**
+ * Crea una cita a partir de una petición HTTP y devuelve CitaResponse.
+ */
 function crearCitaHandler(citaFacade) {
   return async function crearCita(req, res) {
     const body = req.body || {};
@@ -28,4 +31,22 @@ function crearCitaHandler(citaFacade) {
   };
 }
 
-module.exports = { crearCitaHandler };
+/**
+ * Obtiene una cita por su identificador y traduce el resultado al contrato HTTP.
+ */
+function obtenerCitaHandler(citaFacade) {
+  return async function obtenerCita(req, res) {
+    try {
+      const cita = await citaFacade.obtenerCita(req.params.citaId);
+      return res.status(200).json(cita.toResponse());
+    } catch (error) {
+      const status = error.status || 500;
+      return res.status(status).json({
+        codigo: error.codigo || 'ERROR_DESCONOCIDO',
+        mensaje: error.message,
+      });
+    }
+  };
+}
+
+module.exports = { crearCitaHandler, obtenerCitaHandler };

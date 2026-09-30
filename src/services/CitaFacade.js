@@ -10,6 +10,9 @@ class CitaFacade {
     this.citaRepository = citaRepository;
   }
 
+  /**
+   * Crea y persiste una cita después de validar mascota y disponibilidad.
+   */
   async crearCita({ clienteId, mascotaId, fecha, hora, motivo, prioridad }) {
     const mascotaValida = await this.petService.mascotaValida(mascotaId);
     if (!mascotaValida) {
@@ -28,8 +31,24 @@ class CitaFacade {
     }
 
     const cita = new Cita({ clienteId, mascotaId, fecha, hora, motivo, prioridad });
-    cita.confirmar(); // Guarda 1: horarioDisponible == true → CitaConfirmada
+    cita.confirmar();
     await this.citaRepository.guardar(cita);
+    return cita;
+  }
+
+  /**
+   * Recupera una cita por ID y reporta 404 cuando no existe.
+   */
+  async obtenerCita(citaId) {
+    const cita = await this.citaRepository.buscarPorId(citaId);
+
+    if (!cita) {
+      const error = new Error(`No existe una cita con id ${citaId}`);
+      error.codigo = 'CITA_NO_ENCONTRADA';
+      error.status = 404;
+      throw error;
+    }
+
     return cita;
   }
 }
