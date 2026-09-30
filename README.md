@@ -13,7 +13,24 @@ SAD y contrato OpenAPI adoptados del equipo G6 de Diseño de Sistemas.
 Línea base etiquetada como linea-base-heredada.
 
 ## Cómo se levanta
-Pendiente hasta la semana 2, cuando exista código ejecutable.
+1. Ejecutar `npm install`.
+2. Iniciar el backend con `npm start`.
+3. La API queda disponible por defecto en `http://localhost:3000/api/v1`.
+
+## Uso de endpoints
+
+### Crear una cita
+`POST /api/v1/citas`
+
+### Obtener una cita por ID
+`GET /api/v1/citas/{citaId}`
+
+- Responde `200` con `CitaResponse` cuando la cita existe.
+- Responde `404` con el esquema `Error` cuando la cita no existe.
+- Corresponde a `RF-003`, operación `obtenerCita` y caso `TST-05`.
+
+## Pruebas
+Ejecutar `npm test`. Las pruebas de integración están en `/test`.
 
 ## Integrantes
 * Cristian Chura Peralta, 2017-119049, Administrador del repositorio
