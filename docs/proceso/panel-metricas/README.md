@@ -16,13 +16,27 @@
 
 ## 2. Declaración de Indicadores Pendientes
 
-* **Frecuencia de despliegue:** Pendiente por ausencia de entorno de producción y pipeline de CI/CD. Se activará en la Semana 16 con la puesta en marcha del pipeline de despliegue continuo [Silabo_IS1_2026.md, S16].
-* **Tasa de fallos de cambio:** Pendiente por ausencia de telemetría y registro de incidentes en producción. Se activará en la Semana 16 [Silabo_IS1_2026.md, S16].
-* **Tiempo de restauración del servicio:** Pendiente por ausencia de ambiente productivo con monitoreo activo. Se activará en la Semana 16 [Silabo_IS1_2026.md, S16].
+- **Frecuencia de despliegue:** Pendiente por ausencia de entorno de producción y pipeline de CI/CD. Se activará en la Semana 16 con la puesta en marcha del pipeline de despliegue continuo [Silabo_IS1_2026.md, S16].
+- **Tasa de fallos de cambio:** Pendiente por ausencia de telemetría y registro de incidentes en producción. Se activará en la Semana 16 [Silabo_IS1_2026.md, S16].
+- **Tiempo de restauración del servicio:** Pendiente por ausencia de ambiente productivo con monitoreo activo. Se activará en la Semana 16 [Silabo_IS1_2026.md, S16].
 
 ## 3. Trazabilidad y Datos Crudos
 
-* Fecha de extracción: 2026-09-16
-* Fuente: GitHub API REST, `/repos/Cristhian-Chura/is1-2026-vetcare/pulls?state=closed`
-* Archivo de datos crudos: `metricas_raw.json` (en esta misma carpeta)
-* Enlace a confirmación (commit): [pendiente — agregar hash tras el commit]
+- Fecha de extracción: 2026-09-16
+- Fuente: GitHub API REST, `/repos/Cristhian-Chura/is1-2026-vetcare/pulls?state=closed`
+- Archivo de datos crudos: `metricas_raw.json` (en esta misma carpeta)
+- Enlace a confirmación (commit): b0ab3ae
+
+## Actualización semana 8
+
+- **PRs fusionados:** 11 PRs.
+- **Mediana de tiempo de procesamiento (Lead Time):** 0.7 h (Mínimo: 0.07 h, Máximo: 24.1 h).
+- **Fusiones por semana:**
+  - **S2:** 1
+  - **S3:** 1
+  - **S4:** 1
+  - **S6:** 3
+  - **S7:** 5
+  - **S8:** 0
+- **Commits directos a main:** 3 commits.
+- **Indicadores DORA:** Se mantienen pendientes los 3 indicadores principales hasta la semana 16.
