@@ -29,7 +29,7 @@ A continuación, se presentan los hallazgos retenidos con sus respectivos respon
 
 | # | Identificador | Tipo | Origen (Qué declarar) | Esfuerzo estimado | Responsable | Estado |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 1 | `Use full commit SHA hash for this dependency` (`sonarcloud.yml`) | Código (Alta) | Análisis de SonarCloud (Deuda del Sprint 1, no heredada) | 30 minutos | Cristian | Pendiente |
+| 1 | `Use full commit SHA hash for this dependency` (`sonarcloud.yml`) | Código (Alta) | Análisis de SonarCloud (Deuda del Sprint 1, no heredada) | 30 minutos | Cristian | Cerrado (Issue #35) |
 | 2 | Issue #2, Deuda-especificación (estado de Cita tras `DELETE`) | Diseño | Su propio sprint (Deuda de especificación, no de código) | 1 hora | Alexis y David | Pendiente |
 | 3 | Hallazgo `POST /pagos` | Diseño | Proyecto heredado | 1 hora | Alexis | Cerrado |
 
