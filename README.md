@@ -3,7 +3,7 @@ Equipo B-5, Ingeniería de Software I (IS1-2026), UNJBG.
 
 [![Node.js Version](https://img.shields.io/badge/Node.js-v18+-green.svg)](https://nodejs.org/)
 [![Express Framework](https://img.shields.io/badge/Express-v5.2.1-lightgrey.svg)](https://expressjs.com/)
-[![MySQL Database](https://img.shields.io/badge/MySQL-Relacional-blue.svg)](https://www.mysql.com/)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Cristhian-Chura_is1-2026-vetcare&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Cristhian-Chura_is1-2026-vetcare)
 
 ## Qué es
 VetCare es una plataforma backend diseñada para centralizar, automatizar y optimizar los procesos operativos y administrativos de una clínica veterinaria.
@@ -33,7 +33,22 @@ Línea base etiquetada como linea-base-heredada.
 Ejecutar `npm test`. Las pruebas de integración están en `/test`.
 
 ## Integrantes
-* Cristian Chura Peralta, 2017-119049, Administrador del repositorio
-* Luis David Cruz Llica, 2024-119060, Consolidador de entregables
-* Jose Antonio Vilcanqui Chambi, 2024-119017, Coordinador
-* Alexis Condori Rivera, 2023-119015, Custodiador del Open API
+- Cristian Chura Peralta, 2017-119049, Administrador del repositorio
+- Luis David Cruz Llica, 2024-119060, Consolidador de entregables
+- Jose Antonio Vilcanqui Chambi, 2024-119017, Coordinador
+- Alexis Condori Rivera, 2023-119015, Custodiador del Open API
+
+## Proceso de Desarrollo
+
+Para consultar la navegación detallada por semanas, revisa el [Índice de Proceso](docs/proceso/README.md).
+
+```mermaid
+flowchart LR
+  A[Product Backlog] -->|filtro DoR| B[Ready]
+  B --> C[In Progress]
+  C -->|PR + revisión de par| D[In Review]
+  D -->|DoD + CI| E[Done]
+  E --> F[Burndown y velocidad]
+  F --> G[Retrospectiva]
+  G --> H[Plan de mejora]
+  H --> A
