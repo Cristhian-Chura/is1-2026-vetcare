@@ -3,16 +3,39 @@
 // del contrato OpenAPI v3.0.3 (clienteId, fecha, hora, mascotaId).
 const CAMPOS_REQUERIDOS = ['clienteId', 'fecha', 'hora', 'mascotaId'];
 
+const HTTP_OK = 200;
+const HTTP_CREADO = 201;
+const HTTP_SOLICITUD_INVALIDA = 400;
+const HTTP_ERROR_INTERNO = 500;
+
+/**
+ * Traduce un error de dominio a la respuesta HTTP del contrato.
+ */
+function responderError(res, error, statusPorDefecto) {
+  const status = error.status || statusPorDefecto;
+  return res.status(status).json({
+    codigo: error.codigo || 'ERROR_DESCONOCIDO',
+    mensaje: error.message,
+  });
+}
+
+/**
+ * Devuelve los campos obligatorios del contrato que no vienen en el cuerpo.
+ */
+function obtenerCamposFaltantes(body) {
+  return CAMPOS_REQUERIDOS.filter((campo) => !body[campo]);
+}
+
 /**
  * Crea una cita a partir de una petición HTTP y devuelve CitaResponse.
  */
 function crearCitaHandler(citaFacade) {
   return async function crearCita(req, res) {
     const body = req.body || {};
-    const faltantes = CAMPOS_REQUERIDOS.filter((campo) => !body[campo]);
+    const faltantes = obtenerCamposFaltantes(body);
 
     if (faltantes.length > 0) {
-      return res.status(400).json({
+      return res.status(HTTP_SOLICITUD_INVALIDA).json({
         codigo: 'CAMPOS_FALTANTES',
         mensaje: `Faltan campos obligatorios: ${faltantes.join(', ')}`,
       });
@@ -20,13 +43,9 @@ function crearCitaHandler(citaFacade) {
 
     try {
       const cita = await citaFacade.crearCita(body);
-      return res.status(201).json(cita.toResponse());
+      return res.status(HTTP_CREADO).json(cita.toResponse());
     } catch (error) {
-      const status = error.status || 400;
-      return res.status(status).json({
-        codigo: error.codigo || 'ERROR_DESCONOCIDO',
-        mensaje: error.message,
-      });
+      return responderError(res, error, HTTP_SOLICITUD_INVALIDA);
     }
   };
 }
@@ -38,13 +57,9 @@ function obtenerCitaHandler(citaFacade) {
   return async function obtenerCita(req, res) {
     try {
       const cita = await citaFacade.obtenerCita(req.params.citaId);
-      return res.status(200).json(cita.toResponse());
+      return res.status(HTTP_OK).json(cita.toResponse());
     } catch (error) {
-      const status = error.status || 500;
-      return res.status(status).json({
-        codigo: error.codigo || 'ERROR_DESCONOCIDO',
-        mensaje: error.message,
-      });
+      return responderError(res, error, HTTP_ERROR_INTERNO);
     }
   };
 }
