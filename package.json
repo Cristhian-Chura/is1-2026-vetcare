@@ -9,7 +9,8 @@
   "scripts": {
     "start": "node src/server.js",
     "test": "jest",
-    "metricas": "node scripts/metricas.js"
+    "metricas": "node scripts/metricas.js",
+    "lint": "eslint src/"
   },
   "keywords": [],
   "author": "",
@@ -18,5 +19,8 @@
     "express": "^5.2.1",
     "jest": "^30.5.1",
     "supertest": "^7.2.2"
+  },
+  "devDependencies": {
+    "eslint": "^10.14.0"
   }
 }
