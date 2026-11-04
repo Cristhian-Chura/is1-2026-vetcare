@@ -15,12 +15,19 @@ function responderError(res, error, statusPorDefecto) {
 }
 
 /**
+ * Devuelve los campos obligatorios del contrato que no vienen en el cuerpo.
+ */
+function obtenerCamposFaltantes(body) {
+  return CAMPOS_REQUERIDOS.filter((campo) => !body[campo]);
+}
+
+/**
  * Crea una cita a partir de una petición HTTP y devuelve CitaResponse.
  */
 function crearCitaHandler(citaFacade) {
   return async function crearCita(req, res) {
     const body = req.body || {};
-    const faltantes = CAMPOS_REQUERIDOS.filter((campo) => !body[campo]);
+    const faltantes = obtenerCamposFaltantes(body);
 
     if (faltantes.length > 0) {
       return res.status(400).json({
