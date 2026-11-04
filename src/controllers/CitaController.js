@@ -4,6 +4,17 @@
 const CAMPOS_REQUERIDOS = ['clienteId', 'fecha', 'hora', 'mascotaId'];
 
 /**
+ * Traduce un error de dominio a la respuesta HTTP del contrato.
+ */
+function responderError(res, error, statusPorDefecto) {
+  const status = error.status || statusPorDefecto;
+  return res.status(status).json({
+    codigo: error.codigo || 'ERROR_DESCONOCIDO',
+    mensaje: error.message,
+  });
+}
+
+/**
  * Crea una cita a partir de una petición HTTP y devuelve CitaResponse.
  */
 function crearCitaHandler(citaFacade) {
@@ -22,11 +33,7 @@ function crearCitaHandler(citaFacade) {
       const cita = await citaFacade.crearCita(body);
       return res.status(201).json(cita.toResponse());
     } catch (error) {
-      const status = error.status || 400;
-      return res.status(status).json({
-        codigo: error.codigo || 'ERROR_DESCONOCIDO',
-        mensaje: error.message,
-      });
+      return responderError(res, error, 400);
     }
   };
 }
@@ -40,11 +47,7 @@ function obtenerCitaHandler(citaFacade) {
       const cita = await citaFacade.obtenerCita(req.params.citaId);
       return res.status(200).json(cita.toResponse());
     } catch (error) {
-      const status = error.status || 500;
-      return res.status(status).json({
-        codigo: error.codigo || 'ERROR_DESCONOCIDO',
-        mensaje: error.message,
-      });
+      return responderError(res, error, 500);
     }
   };
 }
