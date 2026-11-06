@@ -6,7 +6,6 @@ const HORA_CIERRE = 18;
 
 class AvailabilityService {
   async horarioDisponible(fecha, hora) {
-    // Regla provisional: cualquier hora entre 08:00 y 18:00 se considera disponible.
     const [horaSolicitada] = hora.split(':').map(Number);
     return horaSolicitada >= HORA_APERTURA && horaSolicitada < HORA_CIERRE;
   }
