@@ -1,8 +1,5 @@
 const express = require('express');
-const {
-  crearCitaHandler,
-  obtenerCitaHandler,
-} = require('../controllers/CitaController');
+const { crearCitaHandler, obtenerCitaHandler } = require('../controllers/CitaController');
 
 function citasRouter(citaFacade) {
   const router = express.Router();
