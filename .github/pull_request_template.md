@@ -1,5 +1,5 @@
 ## Issue relacionado
-Cierra #
+Closes #
 
 ## Verificación de la Definición de Terminado (DoD)
 Por favor, marca con una `x` los criterios que han sido verificados para esta entrega:
