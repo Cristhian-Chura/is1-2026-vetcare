@@ -7,10 +7,12 @@
     "test": "test"
   },
   "scripts": {
-    "start": "node src/server.js",
-    "test": "jest",
-    "metricas": "node scripts/metricas.js",
-    "lint": "eslint src/"
+  "start": "node src/server.js",
+  "test": "jest",
+  "metricas": "node scripts/metricas.js",
+  "lint": "eslint src/",
+  "format": "prettier --write \"src/**/*.js\" \"test/**/*.js\" eslint.config.js",
+  "format:check": "prettier --check \"src/**/*.js\" \"test/**/*.js\" eslint.config.js"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +23,7 @@
     "supertest": "^7.2.2"
   },
   "devDependencies": {
-    "eslint": "^10.14.0"
+    "eslint": "^10.14.0",
+    "prettier": "^3.9.10"
   }
 }
