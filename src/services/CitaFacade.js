@@ -1,4 +1,5 @@
 const { Cita } = require('../domain/Cita');
+const { HTTP_SOLICITUD_INVALIDA, HTTP_NO_ENCONTRADO } = require('../shared/httpStatus');
 
 function crearErrorDeNegocio(mensaje, codigo, status) {
   const error = new Error(mensaje);
@@ -35,12 +36,12 @@ class CitaFacade {
   async validarSolicitud(mascotaId, fecha, hora) {
     const mascotaValida = await this.petService.mascotaValida(mascotaId);
     if (!mascotaValida) {
-      throw crearErrorDeNegocio('mascotaId inválido o no encontrado', 'MASCOTA_INVALIDA', 400);
+      throw crearErrorDeNegocio('mascotaId inválido o no encontrado', 'MASCOTA_INVALIDA', HTTP_SOLICITUD_INVALIDA);
     }
 
     const disponible = await this.availabilityService.horarioDisponible(fecha, hora);
     if (!disponible) {
-      throw crearErrorDeNegocio('Horario no disponible', 'HORARIO_NO_DISPONIBLE', 400);
+      throw crearErrorDeNegocio('Horario no disponible', 'HORARIO_NO_DISPONIBLE', HTTP_SOLICITUD_INVALIDA);
     }
   }
 
@@ -51,7 +52,7 @@ class CitaFacade {
     const cita = await this.citaRepository.buscarPorId(citaId);
 
     if (!cita) {
-      throw crearErrorDeNegocio(`No existe una cita con id ${citaId}`, 'CITA_NO_ENCONTRADA', 404);
+      throw crearErrorDeNegocio(`No existe una cita con id ${citaId}`, 'CITA_NO_ENCONTRADA', HTTP_NO_ENCONTRADO);
     }
 
     return cita;
