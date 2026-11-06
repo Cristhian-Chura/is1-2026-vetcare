@@ -3,12 +3,7 @@
 // del contrato OpenAPI v3.0.3 (clienteId, fecha, hora, mascotaId).
 const CAMPOS_REQUERIDOS = ['clienteId', 'fecha', 'hora', 'mascotaId'];
 
-const {
-  HTTP_OK,
-  HTTP_CREADO,
-  HTTP_SOLICITUD_INVALIDA,
-  HTTP_ERROR_INTERNO,
-} = require('../shared/httpStatus');
+const { HTTP_OK, HTTP_CREADO, HTTP_SOLICITUD_INVALIDA, HTTP_ERROR_INTERNO } = require('../shared/httpStatus');
 
 /**
  * Traduce un error de dominio a la respuesta HTTP del contrato.
