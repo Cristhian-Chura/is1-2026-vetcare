@@ -19,7 +19,6 @@ jobs:
       - name: Buscar emojis en titulo, descripcion y commits
         env:
           GH_TOKEN: ${{ github.token }}
-          EVENT_PATH: ${{ github.event_path }}
           EVENT_NAME: ${{ github.event_name }}
           REPO: ${{ github.repository }}
         run: |
@@ -27,7 +26,7 @@ jobs:
           import json, os, re, subprocess, sys
 
           emoji = re.compile("[\U0001F000-\U0001FAFF\u2600-\u26FF\u2705\u2728\u274C\u274E\u2753-\u2755\u2757\u2764\u2795-\u2797\u27A1\u27B0\u27BF\u2B50\u2B55\uFE0F\u200D]")
-          evento = json.load(open(os.environ["EVENT_PATH"], encoding="utf-8"))
+          evento = json.load(open(os.environ["GITHUB_EVENT_PATH"], encoding="utf-8"))
           es_pr = os.environ["EVENT_NAME"] == "pull_request"
           obj = evento["pull_request"] if es_pr else evento["issue"]
 
