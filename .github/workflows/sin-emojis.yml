@@ -1,4 +1,4 @@
-name: Sin emojis
+name: Validación de Convenciones
 
 on:
   pull_request:
