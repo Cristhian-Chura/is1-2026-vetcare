@@ -22,7 +22,7 @@ class CitaFacade {
    * Crea y persiste una cita después de validar mascota y disponibilidad.
    */
   async crearCita({ clienteId, mascotaId, fecha, hora, motivo, prioridad }) {
-    await this.validarSolicitud(mascotaId, fecha, hora);
+    await this.#validarSolicitud(mascotaId, fecha, hora);
 
     const cita = new Cita({ clienteId, mascotaId, fecha, hora, motivo, prioridad });
     cita.confirmar();
@@ -33,7 +33,7 @@ class CitaFacade {
   /**
    * Valida que la mascota exista y que el horario esté disponible.
    */
-  async validarSolicitud(mascotaId, fecha, hora) {
+  async #validarSolicitud(mascotaId, fecha, hora) {
     const mascotaValida = await this.petService.mascotaValida(mascotaId);
     if (!mascotaValida) {
       throw crearErrorDeNegocio('mascotaId inválido o no encontrado', 'MASCOTA_INVALIDA', HTTP_SOLICITUD_INVALIDA);
