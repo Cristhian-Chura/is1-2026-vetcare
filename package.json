@@ -18,12 +18,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.2.1",
-    "jest": "^30.5.1",
-    "supertest": "^7.2.2"
+    "express": "^5.2.1"
   },
   "devDependencies": {
     "eslint": "^10.14.0",
-    "prettier": "^3.9.10"
+    "jest": "^30.5.1",
+    "prettier": "^3.9.10",
+    "supertest": "^7.2.2"
   }
 }
