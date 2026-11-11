@@ -24,6 +24,10 @@ class Cita {
   confirmar() {
     // Guarda 1 del SAD: solo avanza si la disponibilidad fue evaluada como verdadera.
     // Esa evaluación vive en AvailabilityService, no aquí: el dominio solo aplica la transición.
+    // Solo una cita CREADA puede confirmarse (ciclo de vida del SAD v1.0).
+    if (this.estado !== ESTADOS.CREADA) {
+      throw new Error(`No se puede confirmar una cita en estado ${this.estado}`);
+    }
     this.estado = ESTADOS.CONFIRMADA;
   }
 
