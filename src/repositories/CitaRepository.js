@@ -21,7 +21,7 @@ class CitaRepositoryEnMemoria {
   async buscarPorId(citaId) {
     return this._citas.get(citaId) || null;
   }
-
+  // Devuelve todas las citas guardadas, en el orden en que se guardaron.
   async listar() {
     return [...this._citas.values()];
   }
