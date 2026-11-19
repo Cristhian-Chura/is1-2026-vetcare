@@ -23,9 +23,9 @@ class CitaRepositoryEnMemoria {
   }
 
   async listar() {
-    return [];
+    return [...this._citas.values()];
   }
-  
+
   async eliminar(citaId) {
     // Eliminación lógica, no física (ver ADR-003): se delega el cambio de estado
     // a la capa de servicio; el repositorio solo persiste lo que recibe.
