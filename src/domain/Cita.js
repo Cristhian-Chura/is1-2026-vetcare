@@ -8,6 +8,8 @@ const ESTADOS = Object.freeze({
   CANCELADA: 'cancelada',
 });
 
+const ESTADOS_NO_CANCELABLES = [ESTADOS.EN_PROCESO, ESTADOS.FINALIZADA];
+
 class Cita {
   constructor({ citaId, clienteId, mascotaId, fecha, hora, motivo, prioridad }) {
     this.citaId = citaId;
@@ -32,7 +34,7 @@ class Cita {
   }
 
   cancelar() {
-    if (this.estado === ESTADOS.EN_PROCESO) {
+    if (ESTADOS_NO_CANCELABLES.includes(this.estado)) {
       throw new Error(`No se puede cancelar una cita en estado ${this.estado}`);
     }
     this.estado = ESTADOS.CANCELADA;
