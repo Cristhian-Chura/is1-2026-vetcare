@@ -23,4 +23,20 @@ describe('cancelarCitaHandler (DELETE /citas/{citaId})', () => {
     expect(citaFacade.cancelarCita).toHaveBeenCalledWith('cita-7');
     expect(res.json).toHaveBeenCalledWith({ citaId: 'cita-7', estado: 'cancelada' });
   });
+  test('responde 404 con el esquema Error si la cita no existe', async () => {
+    const error = Object.assign(new Error('No existe una cita con id cita-99'), {
+      codigo: 'CITA_NO_ENCONTRADA',
+      status: 404,
+    });
+    const citaFacade = { cancelarCita: jest.fn().mockRejectedValue(error) };
+    const res = respuestaFalsa();
+
+    await cancelarCitaHandler(citaFacade)({ params: { citaId: 'cita-99' } }, res);
+
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({
+      codigo: 'CITA_NO_ENCONTRADA',
+      mensaje: 'No existe una cita con id cita-99',
+    });
+  });
 });
