@@ -46,7 +46,7 @@ Issue en el tablero → rama (sección 4) → commits (sección 5) → pull requ
 ## 6. Revisión e integración
 
 - Ningún PR se integra sin la aprobación de otro integrante (regla del curso).
-- Ningún PR se integra sin el resultado de `npm test` anotado en su descripción (regla del curso).
+- Quien integra ejecuta `npm test` a mano sobre la rama del PR y pega la salida en el PR; la suite completa debe pasar (regla del curso, Semana 12).
 - El CI debe estar en verde.
 - En GitHub, la regla de `main` exige un PR con 1 aprobación y no permite *force push* ni borrar la rama.
 
@@ -83,6 +83,18 @@ Issue en el tablero → rama (sección 4) → commits (sección 5) → pull requ
 | Commits | Forma, longitud e issue | Revisor del PR | Pestaña *Commits* |
 | Etiquetas | Anotada, con notas y en el servidor | Administrador | `git ls-remote --tags origin` |
 | Dependencias | Ubicación y tres respuestas | Revisor del PR | Diff de `package.json` |
+| Pruebas | Prueba vista en rojo, suite en verde, nada apagado | Revisor y quien integra | Registro de ciclos y salida de npm test en el PR |
+## 11. Política de pruebas
+
+| Elemento | Decisión | Fuente | Quién lo verifica |
+|---|---|---|---|
+| Marco y herramienta | Jest 30 (familia xUnit para JavaScript, declarado) con su cobertura integrada (Istanbul). La suite completa se ejecuta con `npm test`; la cobertura, con `npx jest --coverage --collectCoverageFrom="src/**/*.js" --collectCoverageFrom="!src/server.js"` | Documentación oficial de Jest | Quien integra |
+| Dónde viven | Pruebas unitarias en `test/unit/<Modulo>.test.js`; pruebas de integración HTTP en `test/*.integration.test.js` (Supertest) | Declaración del equipo | El revisor del PR |
+| Prueba primero | Toda lógica nueva del núcleo, o toda función existente del núcleo que se modifique, llega con pruebas que se vieron fallar antes del código; el registro de ciclos va en la descripción del PR | Regla del curso; Beck (2002), prefacio | El revisor del PR |
+| Integración limpia | La suite completa pasa antes de integrar; quien integra ejecuta `npm test` a mano sobre la rama y pega la salida en el PR | Regla del curso; Beck (2002), cap. 27 | Quien integra |
+| Nada se apaga | Ninguna prueba se comenta, se borra ni se marca con `test.skip`, `test.only` o `xit` para que la suite pase | Beck (2002), cap. 27 | El revisor, en el diff |
+| Pruebas aisladas | Cada prueba prepara sus propios datos; no depende de otra prueba, de la red ni de una base de datos real; los colaboradores se simulan con `jest.fn()` | Martin (2008), cap. 9, F.I.R.S.T. | El revisor del PR |
+| Defectos insertados | Se insertan solo en la copia local para comprobar que una prueba los detecta, y se deshacen con `git restore`; nunca se integran | Regla del curso | El revisor, en el diff |
 
 ## Anexo: criterios de calidad (DoD y DoR)
 - **Definición de Terminado (DoD)**: Todo PR debe satisfacer el checklist de 7 criterios definido en `.github/pull_request_template.md`.
