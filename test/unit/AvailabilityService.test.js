@@ -27,4 +27,8 @@ describe('horarioDisponible: valida el formato de hora y fecha (#55, #57)', () =
   test('rechaza una hora sin minutos', async () => {
     expect(await servicio.horarioDisponible(FECHA, '10')).toBe(false);
   });
+
+  test('rechaza minutos fuera de rango', async () => {
+    expect(await servicio.horarioDisponible(FECHA, '10:60')).toBe(false);
+  });
 });
