@@ -21,6 +21,10 @@ class CitaRepositoryEnMemoria {
   async buscarPorId(citaId) {
     return this._citas.get(citaId) || null;
   }
+  // Devuelve todas las citas guardadas, en el orden en que se guardaron.
+  async listar() {
+    return [...this._citas.values()];
+  }
 
   async eliminar(citaId) {
     // Eliminación lógica, no física (ver ADR-003): se delega el cambio de estado
