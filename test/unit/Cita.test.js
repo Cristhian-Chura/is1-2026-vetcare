@@ -29,4 +29,8 @@ describe('Cita.cancelar: solo antes de la atención (SAD v1.0, ciclo de vida)', 
     const cita = nuevaCita(ESTADOS.FINALIZADA);
     expect(() => cita.cancelar()).toThrow('No se puede cancelar una cita en estado finalizada');
   });
+  test('no cancela una cita ya cancelada', () => {
+    const cita = nuevaCita(ESTADOS.CANCELADA);
+    expect(() => cita.cancelar()).toThrow('No se puede cancelar una cita en estado cancelada');
+  });
 });
