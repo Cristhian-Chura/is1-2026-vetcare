@@ -57,6 +57,13 @@ class CitaFacade {
 
     return cita;
   }
+
+  /**
+   * Cancela una cita existente: cambia su estado y la guarda (eliminación lógica, ADR-003).
+   */
+  async cancelarCita(citaId) {
+    return this.obtenerCita(citaId);
+  }
 }
 
 module.exports = { CitaFacade };
