@@ -66,8 +66,12 @@ function obtenerCitaHandler(citaFacade) {
  */
 function cancelarCitaHandler(citaFacade) {
   return async function cancelarCita(req, res) {
-    const cita = await citaFacade.cancelarCita(req.params.citaId);
-    return res.status(HTTP_OK).json({ citaId: cita.citaId, estado: cita.estado });
+    try {
+      const cita = await citaFacade.cancelarCita(req.params.citaId);
+      return res.status(HTTP_OK).json({ citaId: cita.citaId, estado: cita.estado });
+    } catch (error) {
+      return responderError(res, error, HTTP_ERROR_INTERNO);
+    }
   };
 }
 
