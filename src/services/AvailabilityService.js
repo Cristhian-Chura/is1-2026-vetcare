@@ -6,6 +6,9 @@ const HORA_CIERRE = 18;
 
 class AvailabilityService {
   async horarioDisponible(fecha, hora) {
+    if (!hora.includes(':')) {
+      return false;
+    }
     const [horaSolicitada] = hora.split(':').map(Number);
     return horaSolicitada >= HORA_APERTURA && horaSolicitada < HORA_CIERRE;
   }
