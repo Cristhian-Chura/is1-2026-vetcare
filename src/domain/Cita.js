@@ -8,8 +8,7 @@ const ESTADOS = Object.freeze({
   CANCELADA: 'cancelada',
 });
 
-const ESTADOS_NO_CANCELABLES = [ESTADOS.EN_PROCESO, ESTADOS.FINALIZADA];
-
+const ESTADOS_NO_CANCELABLES = [ESTADOS.EN_PROCESO, ESTADOS.FINALIZADA, ESTADOS.CANCELADA];
 class Cita {
   constructor({ citaId, clienteId, mascotaId, fecha, hora, motivo, prioridad }) {
     this.citaId = citaId;
