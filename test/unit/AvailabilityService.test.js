@@ -35,4 +35,12 @@ describe('horarioDisponible: valida el formato de hora y fecha (#55, #57)', () =
   test('rechaza una fecha que no existe en el calendario', async () => {
     expect(await servicio.horarioDisponible('2026-02-30', '10:00')).toBe(false);
   });
+
+  test('rechaza una fecha sin la forma AAAA-MM-DD', async () => {
+    expect(await servicio.horarioDisponible('20-11-2026', '10:00')).toBe(false);
+  });
+
+  test('rechaza una fecha con un mes que no existe', async () => {
+    expect(await servicio.horarioDisponible('2026-13-01', '10:00')).toBe(false);
+  });
 });
