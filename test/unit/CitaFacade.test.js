@@ -30,4 +30,20 @@ describe('CitaFacade.cancelarCita', () => {
     expect(citaRepository.eliminar).not.toHaveBeenCalled();
     expect(resultado).toBe(cita);
   });
+
+  test('traduce el rechazo del dominio a CITA_NO_CANCELABLE con 400 y no guarda', async () => {
+    const cita = {
+      citaId: 'cita-2',
+      cancelar: jest.fn(() => {
+        throw new Error('No se puede cancelar una cita en estado finalizada');
+      }),
+    };
+    const { citaFacade, citaRepository } = crearFachada(cita);
+
+    await expect(citaFacade.cancelarCita('cita-2')).rejects.toMatchObject({
+      codigo: 'CITA_NO_CANCELABLE',
+      status: 400,
+    });
+    expect(citaRepository.guardar).not.toHaveBeenCalled();
+  });
 });
