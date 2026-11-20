@@ -24,4 +24,7 @@ describe('horarioDisponible: lo que ya hace (vistas pasar antes de tocar la func
 
 describe('horarioDisponible: valida el formato de hora y fecha (#55, #57)', () => {
   const servicio = new AvailabilityService();
+  test('rechaza una hora sin minutos', async () => {
+    expect(await servicio.horarioDisponible(FECHA, '10')).toBe(false);
+  });
 });
