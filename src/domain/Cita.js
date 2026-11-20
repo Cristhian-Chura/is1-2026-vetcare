@@ -32,6 +32,9 @@ class Cita {
   }
 
   cancelar() {
+    if (this.estado === ESTADOS.EN_PROCESO) {
+      throw new Error(`No se puede cancelar una cita en estado ${this.estado}`);
+    }
     this.estado = ESTADOS.CANCELADA;
   }
 
