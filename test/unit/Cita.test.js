@@ -19,3 +19,10 @@ describe('Cita.cancelar: lo que ya hace (vistas pasar antes de tocar la función
     expect(cita.estado).toBe(ESTADOS.CANCELADA);
   });
 });
+
+describe('Cita.cancelar: solo antes de la atención (SAD v1.0, ciclo de vida)', () => {
+  test('no cancela una cita en atención', () => {
+    const cita = nuevaCita(ESTADOS.EN_PROCESO);
+    expect(() => cita.cancelar()).toThrow('No se puede cancelar una cita en estado en_proceso');
+  });
+});
