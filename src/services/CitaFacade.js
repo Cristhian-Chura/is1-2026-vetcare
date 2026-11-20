@@ -63,7 +63,11 @@ class CitaFacade {
    */
   async cancelarCita(citaId) {
     const cita = await this.obtenerCita(citaId);
-    cita.cancelar();
+    try {
+      cita.cancelar();
+    } catch (error) {
+      throw crearErrorDeNegocio(error.message, 'CITA_NO_CANCELABLE', HTTP_SOLICITUD_INVALIDA);
+    }
     await this.citaRepository.guardar(cita);
     return cita;
   }
