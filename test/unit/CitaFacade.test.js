@@ -18,4 +18,16 @@ describe('CitaFacade.cancelarCita', () => {
       status: 404,
     });
   });
+
+  test('cancela la cita y la guarda sin borrarla (eliminación lógica, ADR-003)', async () => {
+    const cita = { citaId: 'cita-1', cancelar: jest.fn() };
+    const { citaFacade, citaRepository } = crearFachada(cita);
+
+    const resultado = await citaFacade.cancelarCita('cita-1');
+
+    expect(cita.cancelar).toHaveBeenCalled();
+    expect(citaRepository.guardar).toHaveBeenCalledWith(cita);
+    expect(citaRepository.eliminar).not.toHaveBeenCalled();
+    expect(resultado).toBe(cita);
+  });
 });
