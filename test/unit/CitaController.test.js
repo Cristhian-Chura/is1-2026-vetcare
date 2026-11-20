@@ -14,4 +14,13 @@ describe('cancelarCitaHandler (DELETE /citas/{citaId})', () => {
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({ citaId: 'cita-1', estado: 'cancelada' });
   });
+  test('pide a la fachada cancelar la cita del parámetro de la ruta', async () => {
+    const citaFacade = { cancelarCita: jest.fn().mockResolvedValue({ citaId: 'cita-7', estado: 'cancelada' }) };
+    const res = respuestaFalsa();
+
+    await cancelarCitaHandler(citaFacade)({ params: { citaId: 'cita-7' } }, res);
+
+    expect(citaFacade.cancelarCita).toHaveBeenCalledWith('cita-7');
+    expect(res.json).toHaveBeenCalledWith({ citaId: 'cita-7', estado: 'cancelada' });
+  });
 });
