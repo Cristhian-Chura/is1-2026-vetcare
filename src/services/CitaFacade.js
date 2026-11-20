@@ -57,6 +57,20 @@ class CitaFacade {
 
     return cita;
   }
+
+  /**
+   * Cancela una cita existente: cambia su estado y la guarda (eliminación lógica, ADR-003).
+   */
+  async cancelarCita(citaId) {
+    const cita = await this.obtenerCita(citaId);
+    try {
+      cita.cancelar();
+    } catch (error) {
+      throw crearErrorDeNegocio(error.message, 'CITA_NO_CANCELABLE', HTTP_SOLICITUD_INVALIDA);
+    }
+    await this.citaRepository.guardar(cita);
+    return cita;
+  }
 }
 
 module.exports = { CitaFacade };
