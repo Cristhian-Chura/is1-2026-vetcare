@@ -7,7 +7,7 @@ function citasRouter(citaFacade) {
   router.post('/', crearCitaHandler(citaFacade));
   router.get('/:citaId', obtenerCitaHandler(citaFacade));
   router.delete('/:citaId', cancelarCitaHandler(citaFacade));
-  
+
   return router;
 }
 
