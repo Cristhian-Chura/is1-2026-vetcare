@@ -61,4 +61,18 @@ function obtenerCitaHandler(citaFacade) {
   };
 }
 
-module.exports = { crearCitaHandler, obtenerCitaHandler };
+/**
+ * Cancela una cita (DELETE /citas/{citaId}) y devuelve su id y su nuevo estado.
+ */
+function cancelarCitaHandler(citaFacade) {
+  return async function cancelarCita(req, res) {
+    try {
+      const cita = await citaFacade.cancelarCita(req.params.citaId);
+      return res.status(HTTP_OK).json({ citaId: cita.citaId, estado: cita.estado });
+    } catch (error) {
+      return responderError(res, error, HTTP_ERROR_INTERNO);
+    }
+  };
+}
+
+module.exports = { crearCitaHandler, obtenerCitaHandler, cancelarCitaHandler };
