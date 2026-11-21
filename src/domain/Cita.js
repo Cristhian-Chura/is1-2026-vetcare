@@ -8,6 +8,9 @@ const ESTADOS = Object.freeze({
   CANCELADA: 'cancelada',
 });
 
+// Una cita solo se cancela en una etapa previa a la atención (SAD v1.0, ciclo de vida).
+const ESTADOS_CANCELABLES = [ESTADOS.CREADA, ESTADOS.CONFIRMADA];
+
 class Cita {
   constructor({ citaId, clienteId, mascotaId, fecha, hora, motivo, prioridad }) {
     this.citaId = citaId;
@@ -32,6 +35,9 @@ class Cita {
   }
 
   cancelar() {
+    if (!ESTADOS_CANCELABLES.includes(this.estado)) {
+      throw new Error(`No se puede cancelar una cita en estado ${this.estado}`);
+    }
     this.estado = ESTADOS.CANCELADA;
   }
 
