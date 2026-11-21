@@ -69,3 +69,21 @@ describe('GET /api/v1/citas/{citaId} — RF-003 / TST-05', () => {
     });
   });
 });
+
+describe('DELETE /api/v1/citas/{citaId} — cancelarCita', () => {
+  const app = crearApp();
+
+  test('responde 200 y deja la cita en estado cancelada', async () => {
+    const creada = await request(app).post('/api/v1/citas').send({
+      clienteId: 'cliente-03',
+      mascotaId: 'mascota-03',
+      fecha: '2026-09-12',
+      hora: '09:00',
+    });
+
+    const respuesta = await request(app).delete(`/api/v1/citas/${creada.body.citaId}`);
+
+    expect(respuesta.status).toBe(200);
+    expect(respuesta.body).toEqual({ citaId: creada.body.citaId, estado: 'cancelada' });
+  });
+});
