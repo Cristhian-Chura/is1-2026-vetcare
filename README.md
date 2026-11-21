@@ -29,6 +29,14 @@ Línea base etiquetada como linea-base-heredada.
 - Responde `404` con el esquema `Error` cuando la cita no existe.
 - Corresponde a `RF-003`, operación `obtenerCita` y caso `TST-05`.
 
+### Cancelar una cita
+`DELETE /api/v1/citas/{citaId}`
+
+- Responde `200` con `{ citaId, estado: 'cancelada' }` cuando la cita se cancela.
+- Responde `404` con el esquema `Error` cuando la cita no existe.
+- Responde `400` con el esquema `Error` cuando el dominio no permite cancelarla (estado en atención, finalizada o ya cancelada).
+- Corresponde a la operación `cancelarCita`. Los códigos 404 y 400 son un supuesto provisional: el contrato solo define 200.
+
 ## Pruebas
 Ejecutar `npm test`. Las pruebas de integración están en `/test`.
 
