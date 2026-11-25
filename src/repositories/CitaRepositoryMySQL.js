@@ -41,7 +41,8 @@ class CitaRepositoryMySQL {
 
   async buscarPorId(citaId) {
     const [filas] = await this.pool.execute(`SELECT ${COLUMNAS} FROM citas WHERE cita_id = ?`, [citaId]);
-    return aCita(filas[0]);
+    // Devuelve null si no existe: es el contrato del repositorio y la fachada lo traduce a 404.
+    return filas.length > 0 ? aCita(filas[0]) : null;
   }
 }
 
