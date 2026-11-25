@@ -106,8 +106,8 @@ Issue en el tablero → rama (sección 4) → commits (sección 5) → pull requ
 | Plantilla | `.env.example` declara cada variable, qué controla, si es secreta y un valor de ejemplo inofensivo; nunca un valor real | Wiggins (2017), factor III; lectura del curso | El revisor del PR |
 | Archivos locales excluidos | `.env` y `.env.*` están en `.gitignore` (excepto `.env.example`) y en `.dockerignore` | Wiggins (2017), factor III | El revisor, en el diff |
 | Valores por defecto | Ninguna variable de configuración tiene un valor real por defecto en el código: si falta, la aplicación no arranca y dice cuál falta | Wiggins (2017), factor III | El revisor del PR |
-| Secretos | Prohibidos en el código, en el historial y en la imagen. En CI van en GitHub Secrets; en local, en `.env` | Wiggins (2017), factor III; Acta de Retrospectiva Sprint 1 | El revisor, en el diff |
-| Si un secreto entra | Se cambia en el servicio que lo emitió y se registra en el informe por su ubicación y su tipo; borrar el archivo no basta | Lectura del curso (guía S14, apartado 3) | Quien lo detecta |
+| Secretos | Prohibidos en el código, en el historial y en la imagen. En CI van en GitHub Secrets; en local, en `.env` | Wiggins (2017), factor III; Acta de Retrospectiva de Medio Sprint 1, acuerdo 4 | El revisor, en el diff |
+| Si un secreto entra | Se cambia en el servicio que lo emitió y se registra en el informe por su ubicación y su tipo; borrar el archivo no basta | Guía de referencia rápida de la Semana 14, apartado 3 («La configuración fuera del código»), regla del secreto expuesto | Quien lo detecta |
 
 ## Anexo: criterios de calidad (DoD y DoR)
 - **Definición de Terminado (DoD)**: Todo PR debe satisfacer el checklist de 7 criterios definido en `.github/pull_request_template.md`.
