@@ -1,4 +1,4 @@
-const { Cita } = require('../domain/Cita');
+const { Cita, TransicionInvalidaError } = require('../domain/Cita');
 const { HTTP_SOLICITUD_INVALIDA, HTTP_NO_ENCONTRADO } = require('../shared/httpStatus');
 
 function crearErrorDeNegocio(mensaje, codigo, status) {
@@ -66,6 +66,9 @@ class CitaFacade {
     try {
       cita.cancelar();
     } catch (error) {
+      if (!(error instanceof TransicionInvalidaError)) {
+        throw error;
+      }
       throw crearErrorDeNegocio(error.message, 'CITA_NO_CANCELABLE', HTTP_SOLICITUD_INVALIDA);
     }
     await this.citaRepository.guardar(cita);

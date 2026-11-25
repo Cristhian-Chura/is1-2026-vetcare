@@ -1,4 +1,5 @@
 const { CitaFacade } = require('../../src/services/CitaFacade');
+const { TransicionInvalidaError } = require('../../src/domain/Cita');
 
 function crearFachada(citaGuardada) {
   const citaRepository = {
@@ -35,7 +36,7 @@ describe('CitaFacade.cancelarCita', () => {
     const cita = {
       citaId: 'cita-2',
       cancelar: jest.fn(() => {
-        throw new Error('No se puede cancelar una cita en estado finalizada');
+        throw new TransicionInvalidaError('No se puede cancelar una cita en estado finalizada');
       }),
     };
     const { citaFacade, citaRepository } = crearFachada(cita);

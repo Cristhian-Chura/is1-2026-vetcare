@@ -11,6 +11,10 @@ const ESTADOS = Object.freeze({
 // Una cita solo se cancela en una etapa previa a la atención (SAD v1.0, ciclo de vida).
 const ESTADOS_CANCELABLES = [ESTADOS.CREADA, ESTADOS.CONFIRMADA];
 
+// Transición que el ciclo de vida no permite. Es la única que la fachada traduce al contrato;
+// cualquier otro error es un fallo inesperado y sigue su camino.
+class TransicionInvalidaError extends Error {}
+
 class Cita {
   constructor({ citaId, clienteId, mascotaId, fecha, hora, motivo, prioridad }) {
     this.citaId = citaId;
@@ -29,14 +33,14 @@ class Cita {
     // Esa evaluación vive en AvailabilityService, no aquí: el dominio solo aplica la transición.
     // Solo una cita CREADA puede confirmarse (ciclo de vida del SAD v1.0).
     if (this.estado !== ESTADOS.CREADA) {
-      throw new Error(`No se puede confirmar una cita en estado ${this.estado}`);
+      throw new TransicionInvalidaError(`No se puede confirmar una cita en estado ${this.estado}`);
     }
     this.estado = ESTADOS.CONFIRMADA;
   }
 
   cancelar() {
     if (!ESTADOS_CANCELABLES.includes(this.estado)) {
-      throw new Error(`No se puede cancelar una cita en estado ${this.estado}`);
+      throw new TransicionInvalidaError(`No se puede cancelar una cita en estado ${this.estado}`);
     }
     this.estado = ESTADOS.CANCELADA;
   }
@@ -55,4 +59,4 @@ class Cita {
   }
 }
 
-module.exports = { Cita, ESTADOS };
+module.exports = { Cita, ESTADOS, TransicionInvalidaError };
