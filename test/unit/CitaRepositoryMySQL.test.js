@@ -32,4 +32,14 @@ describe('CitaRepositoryMySQL (factores VI y IV)', () => {
     expect(sql).toContain('INSERT INTO citas');
     expect(valores).toEqual([cita.citaId, 'cliente-01', 'mascota-01', '2026-11-20', '10:00', null, 'normal', 'creada']);
   });
+  test('guardar conserva el id de una cita existente y actualiza su estado', async () => {
+    const pool = poolFalso();
+    const cita = citaNueva();
+    cita.citaId = 'cita-abc';
+
+    await new CitaRepositoryMySQL(pool).guardar(cita);
+
+    expect(cita.citaId).toBe('cita-abc');
+    expect(pool.execute.mock.calls[0][0]).toContain('ON DUPLICATE KEY UPDATE');
+  });
 });
