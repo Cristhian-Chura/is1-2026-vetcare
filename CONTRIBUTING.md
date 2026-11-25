@@ -84,6 +84,8 @@ Issue en el tablero → rama (sección 4) → commits (sección 5) → pull requ
 | Etiquetas | Anotada, con notas y en el servidor | Administrador | `git ls-remote --tags origin` |
 | Dependencias | Ubicación y tres respuestas | Revisor del PR | Diff de `package.json` |
 | Pruebas | Prueba vista en rojo, suite en verde, nada apagado | Revisor y quien integra | Registro de ciclos y salida de npm test en el PR |
+| Configuración | Nada de valores reales ni secretos en el código, el historial o la imagen | Revisor del PR | Diff y prueba de fuego |
+
 ## 11. Política de pruebas
 
 | Elemento | Decisión | Fuente | Quién lo verifica |
@@ -95,6 +97,17 @@ Issue en el tablero → rama (sección 4) → commits (sección 5) → pull requ
 | Nada se apaga | Ninguna prueba se comenta, se borra ni se marca con `test.skip`, `test.only` o `xit` para que la suite pase | Beck (2002), cap. 27 | El revisor, en el diff |
 | Pruebas aisladas | Cada prueba prepara sus propios datos; no depende de otra prueba, de la red ni de una base de datos real; los colaboradores se simulan con `jest.fn()` | Martin (2008), cap. 9, F.I.R.S.T. | El revisor del PR |
 | Defectos insertados | Se insertan solo en la copia local para comprobar que una prueba los detecta, y se deshacen con `git restore`; nunca se integran | Regla del curso | El revisor, en el diff |
+
+## 12. Política de configuración y secretos
+
+| Elemento | Regla del equipo | Fuente | Quién lo verifica |
+|---|---|---|---|
+| Qué es configuración | Todo lo que cambia entre despliegues: puerto, conexión a la base de datos, horario de atención. Se lee del entorno en `src/config.js`; el enrutamiento y los módulos se quedan en el código | Wiggins (2017), factor III | El revisor del PR |
+| Plantilla | `.env.example` declara cada variable, qué controla, si es secreta y un valor de ejemplo inofensivo; nunca un valor real | Wiggins (2017), factor III; lectura del curso | El revisor del PR |
+| Archivos locales excluidos | `.env` y `.env.*` están en `.gitignore` (excepto `.env.example`) y en `.dockerignore` | Wiggins (2017), factor III | El revisor, en el diff |
+| Valores por defecto | Ninguna variable de configuración tiene un valor real por defecto en el código: si falta, la aplicación no arranca y dice cuál falta | Wiggins (2017), factor III | El revisor del PR |
+| Secretos | Prohibidos en el código, en el historial y en la imagen. En CI van en GitHub Secrets; en local, en `.env` | Wiggins (2017), factor III; Acta de Retrospectiva de Medio Sprint 1, acuerdo 4 | El revisor, en el diff |
+| Si un secreto entra | Se cambia en el servicio que lo emitió y se registra en el informe por su ubicación y su tipo; borrar el archivo no basta | Guía de referencia rápida de la Semana 14, apartado 3 («La configuración fuera del código»), regla del secreto expuesto | Quien lo detecta |
 
 ## Anexo: criterios de calidad (DoD y DoR)
 - **Definición de Terminado (DoD)**: Todo PR debe satisfacer el checklist de 7 criterios definido en `.github/pull_request_template.md`.
