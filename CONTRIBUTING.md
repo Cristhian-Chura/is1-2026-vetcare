@@ -85,6 +85,7 @@ Issue en el tablero → rama (sección 4) → commits (sección 5) → pull requ
 | Dependencias | Ubicación y tres respuestas | Revisor del PR | Diff de `package.json` |
 | Pruebas | Prueba vista en rojo, suite en verde, nada apagado | Revisor y quien integra | Registro de ciclos y salida de npm test en el PR |
 | Configuración | Nada de valores reales ni secretos en el código, el historial o la imagen | Revisor del PR | Diff y prueba de fuego |
+| Errores | Nada de catch vacíos; fallos inesperados como 500 con evento | Revisor del PR | Diff y pruebas del error |
 
 ## 11. Política de pruebas
 
@@ -108,6 +109,18 @@ Issue en el tablero → rama (sección 4) → commits (sección 5) → pull requ
 | Valores por defecto | Ninguna variable de configuración tiene un valor real por defecto en el código: si falta, la aplicación no arranca y dice cuál falta | Wiggins (2017), factor III | El revisor del PR |
 | Secretos | Prohibidos en el código, en el historial y en la imagen. En CI van en GitHub Secrets; en local, en `.env` | Wiggins (2017), factor III; Acta de Retrospectiva de Medio Sprint 1, acuerdo 4 | El revisor, en el diff |
 | Si un secreto entra | Se cambia en el servicio que lo emitió y se registra en el informe por su ubicación y su tipo; borrar el archivo no basta | Guía de referencia rápida de la Semana 14, apartado 3 («La configuración fuera del código»), regla del secreto expuesto | Quien lo detecta |
+
+## 13. Política de manejo de errores
+
+| Elemento | Regla del equipo | Fuente | Quién lo verifica |
+|---|---|---|---|
+| Cómo se comunica un error | Con una excepción, no con un código de retorno. Los errores de negocio llevan `codigo` y `status`; el dominio lanza `TransicionInvalidaError` | Martin (2008), cap. 7, p. 104 | El revisor del PR |
+| Contexto del mensaje | Qué operación era y qué valor llegó (por ejemplo, la hora recibida); nunca credenciales ni datos personales | Martin (2008), cap. 7, p. 107; SWEBOK KA 4, § 4.5 | El revisor del PR |
+| Excepciones de bibliotecas externas | Se traducen en el borde: el cuerpo que no es JSON se convierte en `JSON_INVALIDO` en `src/middleware/jsonInvalido.js`; los fallos de MySQL llegan a `responderError` como error interno | Martin (2008), cap. 7, p. 108 | El revisor del PR |
+| Bloque de captura vacío | Prohibido. Todo `catch` traduce, registra o relanza | SWEBOK KA 4, § 4.5, p. 4-11 | El revisor, en el diff |
+| Fallo inesperado | Responde 500 con `ERROR_INTERNO` sin el mensaje interno, y se escribe un evento de nivel error con la operación y el motivo | SWEBOK KA 4, § 4.5; Wiggins (2017), factor XI | El revisor del PR |
+| Nulos | Ninguna función devuelve ni recibe nulo, salvo `buscarPorId` del repositorio, que devuelve `null` si la cita no existe: es su contrato y la fachada lo traduce a 404 | Martin (2008), cap. 7, pp. 110-111 | El revisor del PR |
+| Prueba primero | Todo manejo de error nuevo se escribe con la prueba que fuerza el error, vista en rojo | Martin (2008), cap. 7, pp. 105-106 | El revisor, en el registro de ciclos |
 
 ## Anexo: criterios de calidad (DoD y DoR)
 - **Definición de Terminado (DoD)**: Todo PR debe satisfacer el checklist de 7 criterios definido en `.github/pull_request_template.md`.
