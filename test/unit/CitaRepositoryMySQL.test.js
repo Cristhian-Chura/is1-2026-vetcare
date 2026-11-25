@@ -56,4 +56,7 @@ describe('CitaRepositoryMySQL (factores VI y IV)', () => {
       estado: 'confirmada',
     });
   });
+  test('buscarPorId devuelve null si la cita no existe', async () => {
+    expect(await new CitaRepositoryMySQL(poolFalso([])).buscarPorId('cita-x')).toBeNull();
+  });
 });
