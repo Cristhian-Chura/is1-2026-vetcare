@@ -12,6 +12,20 @@ function aValores(cita) {
   return [cita.citaId, cita.clienteId, cita.mascotaId, cita.fecha, cita.hora, cita.motivo, cita.prioridad, cita.estado];
 }
 
+function aCita(fila) {
+  const cita = new Cita({
+    citaId: fila.cita_id,
+    clienteId: fila.cliente_id,
+    mascotaId: fila.mascota_id,
+    fecha: fila.fecha,
+    hora: fila.hora,
+    motivo: fila.motivo,
+    prioridad: fila.prioridad,
+  });
+  cita.estado = fila.estado;
+  return cita;
+}
+
 class CitaRepositoryMySQL {
   constructor(pool) {
     this.pool = pool;
@@ -23,6 +37,11 @@ class CitaRepositoryMySQL {
     }
     await this.pool.execute(SQL_GUARDAR, aValores(cita));
     return cita;
+  }
+
+  async buscarPorId(citaId) {
+    const [filas] = await this.pool.execute(`SELECT ${COLUMNAS} FROM citas WHERE cita_id = ?`, [citaId]);
+    return aCita(filas[0]);
   }
 }
 
