@@ -4,7 +4,9 @@ const { randomUUID } = require('node:crypto');
 const { Cita } = require('../domain/Cita');
 
 const COLUMNAS = 'cita_id, cliente_id, mascota_id, fecha, hora, motivo, prioridad, estado';
-const SQL_GUARDAR = `INSERT INTO citas (${COLUMNAS}) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+// Inserta la cita nueva o, si ya existe, actualiza su estado (cancelar es una eliminación lógica, ADR-003).
+const SQL_GUARDAR = `INSERT INTO citas (${COLUMNAS}) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  AS nueva ON DUPLICATE KEY UPDATE estado = nueva.estado`;
 
 function aValores(cita) {
   return [cita.citaId, cita.clienteId, cita.mascotaId, cita.fecha, cita.hora, cita.motivo, cita.prioridad, cita.estado];
@@ -16,7 +18,9 @@ class CitaRepositoryMySQL {
   }
 
   async guardar(cita) {
-    cita.citaId = `cita-${randomUUID()}`;
+    if (!cita.citaId) {
+      cita.citaId = `cita-${randomUUID()}`;
+    }
     await this.pool.execute(SQL_GUARDAR, aValores(cita));
     return cita;
   }
