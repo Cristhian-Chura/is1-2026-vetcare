@@ -42,4 +42,18 @@ describe('CitaRepositoryMySQL (factores VI y IV)', () => {
     expect(cita.citaId).toBe('cita-abc');
     expect(pool.execute.mock.calls[0][0]).toContain('ON DUPLICATE KEY UPDATE');
   });
+  test('buscarPorId reconstruye la cita con el estado guardado', async () => {
+    const cita = await new CitaRepositoryMySQL(poolFalso([FILA])).buscarPorId('cita-abc');
+
+    expect(cita.toResponse()).toEqual({
+      citaId: 'cita-abc',
+      clienteId: 'cliente-01',
+      mascotaId: 'mascota-01',
+      fecha: '2026-11-20',
+      hora: '10:00',
+      motivo: null,
+      prioridad: 'normal',
+      estado: 'confirmada',
+    });
+  });
 });
