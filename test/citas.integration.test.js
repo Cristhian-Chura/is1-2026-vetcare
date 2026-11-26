@@ -94,3 +94,20 @@ describe('DELETE /api/v1/citas/{citaId} — cancelarCita', () => {
     expect(respuesta.body).toEqual({ citaId: creada.body.citaId, estado: 'cancelada' });
   });
 });
+
+describe('Cuerpo que no es JSON (error escondido)', () => {
+  const app = crearAppDePrueba();
+
+  test('responde 400 con el esquema Error si el cuerpo no es JSON válido', async () => {
+    const respuesta = await request(app)
+      .post('/api/v1/citas')
+      .set('Content-Type', 'application/json')
+      .send('{"clienteId": ');
+
+    expect(respuesta.status).toBe(400);
+    expect(respuesta.body).toEqual({
+      codigo: 'JSON_INVALIDO',
+      mensaje: 'El cuerpo de la petición no es JSON válido',
+    });
+  });
+});
