@@ -1,8 +1,15 @@
 const request = require('supertest');
 const { crearApp } = require('../src/app');
+const { CitaRepositoryEnMemoria } = require('../src/repositories/CitaRepository');
+
+// Las pruebas arman la aplicación con un horario fijo y el repositorio en memoria,
+// sin leer el entorno ni conectarse a MySQL.
+function crearAppDePrueba() {
+  return crearApp({ horario: { apertura: 8, cierre: 18 }, citaRepository: new CitaRepositoryEnMemoria() });
+}
 
 describe('POST /api/v1/citas — rebanada vertical', () => {
-  const app = crearApp();
+  const app = crearAppDePrueba();
 
   test('crea una cita y responde 201 con el esquema CitaResponse', async () => {
     const respuesta = await request(app).post('/api/v1/citas').send({
@@ -39,7 +46,7 @@ describe('POST /api/v1/citas — rebanada vertical', () => {
 });
 
 describe('GET /api/v1/citas/{citaId} — RF-003 / TST-05', () => {
-  const app = crearApp();
+  const app = crearAppDePrueba();
 
   test('responde 200 y CitaResponse cuando la cita existe', async () => {
     const creada = await request(app).post('/api/v1/citas').send({
@@ -71,7 +78,7 @@ describe('GET /api/v1/citas/{citaId} — RF-003 / TST-05', () => {
 });
 
 describe('DELETE /api/v1/citas/{citaId} — cancelarCita', () => {
-  const app = crearApp();
+  const app = crearAppDePrueba();
 
   test('responde 200 y deja la cita en estado cancelada', async () => {
     const creada = await request(app).post('/api/v1/citas').send({
