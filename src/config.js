@@ -5,6 +5,16 @@ const VARIABLES_REQUERIDAS = ['PORT', 'DATABASE_URL', 'HORA_APERTURA', 'HORA_CIE
 /**
  * Lee la configuración del entorno.
  */
+
+
+function leerHora(entorno, nombre) {
+  const valor = Number(entorno[nombre]);
+  if (!Number.isInteger(valor) || valor < 0 || valor > 24) {
+    throw new Error(`${nombre} debe ser un número entero de 0 a 24 (revise .env.example)`);
+  }
+  return valor;
+}
+
 function leerConfiguracion(entorno) {
 
   const faltantes = VARIABLES_REQUERIDAS.filter((nombre) => !entorno[nombre]);
@@ -14,7 +24,7 @@ function leerConfiguracion(entorno) {
   return {
     puerto: Number(entorno.PORT),
     databaseUrl: entorno.DATABASE_URL,
-    horario: { apertura: Number(entorno.HORA_APERTURA), cierre: Number(entorno.HORA_CIERRE) },
+    horario: { apertura: leerHora(entorno, 'HORA_APERTURA'), cierre: leerHora(entorno, 'HORA_CIERRE') },
   };
 }
 
