@@ -8,6 +8,7 @@
   },
   "scripts": {
   "start": "node src/server.js",
+  "start:local": "node --env-file=.env src/server.js",
   "test": "jest",
   "metricas": "node scripts/metricas.js",
   "lint": "eslint src/",

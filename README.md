@@ -13,9 +13,12 @@ SAD y contrato OpenAPI adoptados del equipo G6 de Diseño de Sistemas.
 Línea base etiquetada como linea-base-heredada.
 
 ## Cómo se levanta
-1. Ejecutar `npm install`.
-2. Iniciar el backend con `npm start`.
-3. La API queda disponible por defecto en `http://localhost:3000/api/v1`.
+1. Ejecutar `npx npm@10 ci`.
+2. Copiar `.env.example` como `.env` y completar los valores de su máquina. El `.env` no se sube.
+3. Iniciar el backend con `npm run start:local`.
+4. La API queda disponible en `http://localhost:<PORT>/api/v1`, con el `PORT` de su `.env`.
+
+Si falta una variable de configuración, la aplicación no arranca y dice cuál falta.
 
 ## Uso de endpoints
 
