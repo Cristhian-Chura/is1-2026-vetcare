@@ -22,4 +22,10 @@ describe('leerConfiguracion (factor III)', () => {
     );
   });
 
+  test('lanza un error si una hora del horario no es un número entero', () => {
+    expect(() => leerConfiguracion({ ...ENTORNO_COMPLETO, HORA_CIERRE: 'seis' })).toThrow(
+      'HORA_CIERRE debe ser un número entero de 0 a 24',
+    );
+  });
+
 });
