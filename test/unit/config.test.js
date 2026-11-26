@@ -27,4 +27,17 @@ describe('leerConfiguracion (factor III)', () => {
       'HORA_CIERRE debe ser un número entero de 0 a 24',
     );
   });
+
+  test('lanza un error si una hora del horario es negativa', () => {
+    expect(() => leerConfiguracion({ ...ENTORNO_COMPLETO, HORA_APERTURA: '-1' })).toThrow(
+      'HORA_APERTURA debe ser un número entero de 0 a 24',
+    );
+  });
+
+  test('lanza un error si una hora del horario pasa de 24', () => {
+    expect(() => leerConfiguracion({ ...ENTORNO_COMPLETO, HORA_CIERRE: '25' })).toThrow(
+      'HORA_CIERRE debe ser un número entero de 0 a 24',
+    );
+  });
+
 });
