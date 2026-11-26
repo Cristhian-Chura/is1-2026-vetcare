@@ -15,4 +15,11 @@ describe('leerConfiguracion (factor III)', () => {
       horario: { apertura: 8, cierre: 18 },
     });
   });
+
+  test('lanza un error que nombra las variables que faltan', () => {
+    expect(() => leerConfiguracion({ PORT: '3000' })).toThrow(
+      'Faltan variables de entorno: DATABASE_URL, HORA_APERTURA, HORA_CIERRE',
+    );
+  });
+
 });
