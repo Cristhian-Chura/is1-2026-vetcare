@@ -9,7 +9,7 @@ function manejarJsonInvalido(error, req, res, next) {
   if (error.type !== 'entity.parse.failed') {
     return next(error);
   }
-  
+
   return res.status(HTTP_SOLICITUD_INVALIDA).json({
     codigo: 'JSON_INVALIDO',
     mensaje: 'El cuerpo de la petición no es JSON válido',
