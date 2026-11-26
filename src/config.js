@@ -1,11 +1,6 @@
 // Factor III: todo lo que cambia entre despliegues se lee del entorno.
 // Los nombres y un valor de ejemplo inofensivo están en .env.example; los valores reales, nunca en el código.
-
 const VARIABLES_REQUERIDAS = ['PORT', 'DATABASE_URL', 'HORA_APERTURA', 'HORA_CIERRE'];
-/**
- * Lee la configuración del entorno.
- */
-
 
 function leerHora(entorno, nombre) {
   const valor = Number(entorno[nombre]);
@@ -15,8 +10,10 @@ function leerHora(entorno, nombre) {
   return valor;
 }
 
+/**
+ * Lee y valida la configuración; falla al arrancar, con el nombre de lo que falta y sin mostrar valores.
+ */
 function leerConfiguracion(entorno) {
-
   const faltantes = VARIABLES_REQUERIDAS.filter((nombre) => !entorno[nombre]);
   if (faltantes.length > 0) {
     throw new Error(`Faltan variables de entorno: ${faltantes.join(', ')} (revise .env.example)`);

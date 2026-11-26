@@ -27,5 +27,4 @@ describe('leerConfiguracion (factor III)', () => {
       'HORA_CIERRE debe ser un número entero de 0 a 24',
     );
   });
-
 });
