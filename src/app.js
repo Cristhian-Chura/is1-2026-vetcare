@@ -3,6 +3,7 @@ const { citasRouter } = require('./routes/citas');
 const { CitaFacade } = require('./services/CitaFacade');
 const { AvailabilityService } = require('./services/AvailabilityService');
 const { PetService } = require('./services/PetService');
+const { manejarJsonInvalido } = require('./middleware/jsonInvalido');
 
 function crearApp({ horario, citaRepository }) {
   const app = express();
@@ -16,6 +17,7 @@ function crearApp({ horario, citaRepository }) {
   });
 
   app.use('/api/v1/citas', citasRouter(citaFacade));
+  app.use(manejarJsonInvalido);
 
   return app;
 }
