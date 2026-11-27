@@ -24,7 +24,7 @@ describe('responderError: fallos inesperados (error escondido)', () => {
     expect(res.json).toHaveBeenCalledWith({ codigo: 'ERROR_INTERNO', mensaje: 'Error interno del servidor' });
   });
 
-    test('registra el fallo en el flujo de eventos con la operación', async () => {
+  test('registra el fallo en el flujo de eventos con la operación', async () => {
     const registrarError = jest.spyOn(logger, 'error').mockImplementation(() => {});
 
     await crearCitaHandler(fachadaQueFalla())({ body: CITA_VALIDA }, respuestaFalsa());
