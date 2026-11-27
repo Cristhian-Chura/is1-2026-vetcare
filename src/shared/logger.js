@@ -7,6 +7,7 @@ function registrar(nivel, evento) {
 
 const logger = {
   info: (evento) => registrar('info', evento),
+  error: (evento) => registrar('error', evento),
 };
 
 module.exports = { logger };
