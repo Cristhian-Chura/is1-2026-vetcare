@@ -5,6 +5,8 @@ const CAMPOS_REQUERIDOS = ['clienteId', 'fecha', 'hora', 'mascotaId'];
 
 const { HTTP_OK, HTTP_CREADO, HTTP_SOLICITUD_INVALIDA, HTTP_ERROR_INTERNO } = require('../shared/httpStatus');
 
+const { logger } = require('../shared/logger');
+
 const MENSAJE_ERROR_INTERNO = 'Error interno del servidor';
 
 /**
@@ -13,6 +15,7 @@ const MENSAJE_ERROR_INTERNO = 'Error interno del servidor';
  */
 function responderError(res, error, operacion) {
   if (!error.status) {
+    logger.error({ operacion, resultado: error.message });
     return res.status(HTTP_ERROR_INTERNO).json({ codigo: 'ERROR_INTERNO', mensaje: MENSAJE_ERROR_INTERNO });
   }
   return res.status(error.status).json({ codigo: error.codigo, mensaje: error.message });
