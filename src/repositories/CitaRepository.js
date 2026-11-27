@@ -1,8 +1,6 @@
 // ADR-003: el dominio depende de una interfaz (RepositorioCita), nunca al revés.
-// Esta es la implementación concreta para la rebanada vertical: almacenamiento en
-// memoria, tal como permite la FAQ de la guía de laboratorio mientras la BD real
-// (MySQL/Google Cloud SQL) no está configurada. Cambiar a MySQL más adelante no
-// debería tocar CitaFacade ni CitaService: solo esta clase.
+// Doble de prueba: guarda las citas en la memoria del proceso y solo lo usan las pruebas.
+// En ejecución las citas viven en MySQL (CitaRepositoryMySQL, factor VI).
 class CitaRepositoryEnMemoria {
   constructor() {
     this._citas = new Map();
