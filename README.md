@@ -15,8 +15,10 @@ Línea base etiquetada como linea-base-heredada.
 ## Cómo se levanta
 1. Ejecutar `npx npm@10 ci`.
 2. Copiar `.env.example` como `.env` y completar los valores de su máquina. El `.env` no se sube.
-3. Iniciar el backend con `npm run start:local`.
-4. La API queda disponible en `http://localhost:<PORT>/api/v1`, con el `PORT` de su `.env`.
+3. Levantar MySQL 8.4, por ejemplo con Docker. Cree un `.env.db` (no se sube) con `MYSQL_ROOT_PASSWORD=<su clave>`, use la misma clave en `DATABASE_URL` y ejecute `docker run -d --name vetcare-db -p 3306:3306 --env-file .env.db -e MYSQL_DATABASE=vetcare mysql:8.4`.
+4. Crear la tabla una vez con `npm run migrar`.
+5. Iniciar el backend con `npm run start:local`.
+6. La API queda disponible en `http://localhost:<PORT>/api/v1`, con el `PORT` de su `.env`.
 
 Si falta una variable de configuración, la aplicación no arranca y dice cuál falta.
 
