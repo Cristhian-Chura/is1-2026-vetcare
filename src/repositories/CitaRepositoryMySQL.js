@@ -30,7 +30,7 @@ class CitaRepositoryMySQL {
   constructor(pool) {
     this.pool = pool;
   }
-
+  // Guarda la cita: si es nueva le asigna un id UUID y la inserta; si ya existe, actualiza su estado.
   async guardar(cita) {
     if (!cita.citaId) {
       cita.citaId = `cita-${randomUUID()}`;
@@ -38,7 +38,7 @@ class CitaRepositoryMySQL {
     await this.pool.execute(SQL_GUARDAR, aValores(cita));
     return cita;
   }
-
+  // Busca una cita por su id; devuelve null si no existe.
   async buscarPorId(citaId) {
     const [filas] = await this.pool.execute(`SELECT ${COLUMNAS} FROM citas WHERE cita_id = ?`, [citaId]);
     // Devuelve null si no existe: es el contrato del repositorio y la fachada lo traduce a 404.
