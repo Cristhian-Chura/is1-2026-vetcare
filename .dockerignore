@@ -1,0 +1,16 @@
+# Fuera de la imagen: dependencias locales, pruebas, documentación, historial y configuración local.
+node_modules
+coverage
+test
+docs
+.git
+.github
+.env
+.env.*
+**/*.md
+eslint.config.js
+.prettierrc
+sonar-project.properties
+scripts/metricas.js
+Dockerfile
+.dockerignore
