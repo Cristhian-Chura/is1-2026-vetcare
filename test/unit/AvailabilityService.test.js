@@ -23,9 +23,14 @@ describe('horarioDisponible: lo que ya hace (vistas pasar antes de tocar la func
 });
 
 describe('horarioDisponible: valida el formato de hora y fecha (#55, #57)', () => {
-  const servicio = new AvailabilityService({ apertura: 8, cierre: 18 })
-  test('rechaza una hora sin minutos', async () => {
-    expect(await servicio.horarioDisponible(FECHA, '10')).toBe(false);
+  const servicio = new AvailabilityService({ apertura: 8, cierre: 18 });
+  const FORMATO_INVALIDO = { codigo: 'FORMATO_INVALIDO', status: 400 };
+
+  test('rechaza una hora sin minutos con FORMATO_INVALIDO y la hora recibida', async () => {
+    await expect(servicio.horarioDisponible(FECHA, '10')).rejects.toMatchObject({
+      ...FORMATO_INVALIDO,
+      message: 'Hora inválida "10": se espera HH:MM entre 00:00 y 23:59',
+    });
   });
 
   test('rechaza minutos fuera de rango', async () => {
