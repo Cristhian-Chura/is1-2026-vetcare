@@ -1,8 +1,11 @@
 const { crearApp } = require('./app');
+const { leerConfiguracion } = require('./config');
+const { CitaRepositoryEnMemoria } = require('./repositories/CitaRepository');
+const { logger } = require('./shared/logger');
 
-const PUERTO = process.env.PORT || 3000;
-const app = crearApp();
+const config = leerConfiguracion(process.env);
+const app = crearApp({ horario: config.horario, citaRepository: new CitaRepositoryEnMemoria() });
 
-app.listen(PUERTO, () => {
-  console.log(`VetCare API escuchando en http://localhost:${PUERTO}`);
+app.listen(config.puerto, () => {
+  logger.info({ operacion: 'servidor.iniciar', resultado: 'escuchando', puerto: config.puerto });
 });

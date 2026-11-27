@@ -1,8 +1,15 @@
 const request = require('supertest');
 const { crearApp } = require('../src/app');
+const { CitaRepositoryEnMemoria } = require('../src/repositories/CitaRepository');
+
+// Las pruebas arman la aplicación con un horario fijo y el repositorio en memoria,
+// sin leer el entorno ni conectarse a MySQL.
+function crearAppDePrueba() {
+  return crearApp({ horario: { apertura: 8, cierre: 18 }, citaRepository: new CitaRepositoryEnMemoria() });
+}
 
 describe('POST /api/v1/citas — rebanada vertical', () => {
-  const app = crearApp();
+  const app = crearAppDePrueba();
 
   test('crea una cita y responde 201 con el esquema CitaResponse', async () => {
     const respuesta = await request(app).post('/api/v1/citas').send({
@@ -39,7 +46,7 @@ describe('POST /api/v1/citas — rebanada vertical', () => {
 });
 
 describe('GET /api/v1/citas/{citaId} — RF-003 / TST-05', () => {
-  const app = crearApp();
+  const app = crearAppDePrueba();
 
   test('responde 200 y CitaResponse cuando la cita existe', async () => {
     const creada = await request(app).post('/api/v1/citas').send({
@@ -71,7 +78,7 @@ describe('GET /api/v1/citas/{citaId} — RF-003 / TST-05', () => {
 });
 
 describe('DELETE /api/v1/citas/{citaId} — cancelarCita', () => {
-  const app = crearApp();
+  const app = crearAppDePrueba();
 
   test('responde 200 y deja la cita en estado cancelada', async () => {
     const creada = await request(app).post('/api/v1/citas').send({
@@ -85,5 +92,22 @@ describe('DELETE /api/v1/citas/{citaId} — cancelarCita', () => {
 
     expect(respuesta.status).toBe(200);
     expect(respuesta.body).toEqual({ citaId: creada.body.citaId, estado: 'cancelada' });
+  });
+});
+
+describe('Cuerpo que no es JSON (error escondido)', () => {
+  const app = crearAppDePrueba();
+
+  test('responde 400 con el esquema Error si el cuerpo no es JSON válido', async () => {
+    const respuesta = await request(app)
+      .post('/api/v1/citas')
+      .set('Content-Type', 'application/json')
+      .send('{"clienteId": ');
+
+    expect(respuesta.status).toBe(400);
+    expect(respuesta.body).toEqual({
+      codigo: 'JSON_INVALIDO',
+      mensaje: 'El cuerpo de la petición no es JSON válido',
+    });
   });
 });
