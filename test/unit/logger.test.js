@@ -13,7 +13,7 @@ describe('logger (factor XI)', () => {
     expect(JSON.parse(linea)).toMatchObject({ nivel: 'info', operacion: 'servidor.iniciar', resultado: 'escuchando' });
   });
 
-    test('marca el momento del evento en formato ISO y el nivel error', () => {
+  test('marca el momento del evento en formato ISO y el nivel error', () => {
     const escribir = jest.spyOn(process.stdout, 'write').mockImplementation(() => true);
 
     logger.error({ operacion: 'citas.crear', resultado: 'fallo' });
