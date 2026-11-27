@@ -5,15 +5,20 @@ const CAMPOS_REQUERIDOS = ['clienteId', 'fecha', 'hora', 'mascotaId'];
 
 const { HTTP_OK, HTTP_CREADO, HTTP_SOLICITUD_INVALIDA, HTTP_ERROR_INTERNO } = require('../shared/httpStatus');
 
+const { logger } = require('../shared/logger');
+
+const MENSAJE_ERROR_INTERNO = 'Error interno del servidor';
+
 /**
- * Traduce un error de dominio a la respuesta HTTP del contrato.
+ * Traduce un error al contrato HTTP. Un error sin status es un fallo inesperado:
+ * se registra en el flujo de eventos y al cliente solo se le dice que fue interno.
  */
-function responderError(res, error, statusPorDefecto) {
-  const status = error.status || statusPorDefecto;
-  return res.status(status).json({
-    codigo: error.codigo || 'ERROR_DESCONOCIDO',
-    mensaje: error.message,
-  });
+function responderError(res, error, operacion) {
+  if (!error.status) {
+    logger.error({ operacion, resultado: error.message });
+    return res.status(HTTP_ERROR_INTERNO).json({ codigo: 'ERROR_INTERNO', mensaje: MENSAJE_ERROR_INTERNO });
+  }
+  return res.status(error.status).json({ codigo: error.codigo, mensaje: error.message });
 }
 
 /**
@@ -42,7 +47,7 @@ function crearCitaHandler(citaFacade) {
       const cita = await citaFacade.crearCita(body);
       return res.status(HTTP_CREADO).json(cita.toResponse());
     } catch (error) {
-      return responderError(res, error, HTTP_SOLICITUD_INVALIDA);
+      return responderError(res, error, 'citas.crear');
     }
   };
 }
@@ -56,7 +61,7 @@ function obtenerCitaHandler(citaFacade) {
       const cita = await citaFacade.obtenerCita(req.params.citaId);
       return res.status(HTTP_OK).json(cita.toResponse());
     } catch (error) {
-      return responderError(res, error, HTTP_ERROR_INTERNO);
+      return responderError(res, error, 'citas.obtener');
     }
   };
 }
@@ -70,7 +75,7 @@ function cancelarCitaHandler(citaFacade) {
       const cita = await citaFacade.cancelarCita(req.params.citaId);
       return res.status(HTTP_OK).json({ citaId: cita.citaId, estado: cita.estado });
     } catch (error) {
-      return responderError(res, error, HTTP_ERROR_INTERNO);
+      return responderError(res, error, 'citas.cancelar');
     }
   };
 }
