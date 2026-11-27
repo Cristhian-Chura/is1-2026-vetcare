@@ -23,4 +23,15 @@ describe('responderError: fallos inesperados (error escondido)', () => {
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({ codigo: 'ERROR_INTERNO', mensaje: 'Error interno del servidor' });
   });
+
+    test('registra el fallo en el flujo de eventos con la operación', async () => {
+    const registrarError = jest.spyOn(logger, 'error').mockImplementation(() => {});
+
+    await crearCitaHandler(fachadaQueFalla())({ body: CITA_VALIDA }, respuestaFalsa());
+
+    expect(registrarError.mock.calls[0][0]).toMatchObject({
+      operacion: 'citas.crear',
+      resultado: 'connect ECONNREFUSED 127.0.0.1:3306',
+    });
+  });
 });
